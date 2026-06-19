@@ -1,0 +1,238 @@
+body {
+    margin: 0;
+    height: 100vh;
+
+    /* background-image: url("./assets/stars-galaxy-2560x1440-10307.jpg"); */
+    background-size: cover;
+    background-position: center;
+
+    overflow: hidden;
+}
+
+
+/* main game area */
+#game {
+    position: relative;
+
+    width: 800px;
+    height: 600px;
+
+    margin: auto;
+
+    overflow: hidden;
+}
+
+
+
+/* HUD */
+#hud {
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 20px;
+
+    color: white(243, 250, 250);
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* containers */
+#enemy-container,
+#bullet-container {
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+
+    pointer-events: none;
+}
+
+
+
+/* Player */
+#player {
+    position: absolute;
+
+    left: 50%;
+    bottom: 1%;
+
+    transform: translateX(-50%);
+}
+
+#player img {
+    width: 70px;
+}
+
+
+
+/* Pause Menu */
+
+#pause-menu {
+
+    display: none;
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    padding: 30px;
+
+
+    background: rgba(0,0,0,0.85);
+
+
+    border: 2px solid rgb(132,131,175);
+
+    border-radius: 10px;
+
+
+    text-align: center;
+
+    color: white;
+}
+
+
+#pause-menu button {
+
+
+    padding: 10px 20px;
+
+
+    font-size: 18px;
+
+
+    cursor: pointer;
+
+
+    border: none;
+
+    border-radius: 5px;
+
+}
+
+
+#pause-menu button:hover {
+
+    transform: scale(1.05);
+
+}
+
+
+
+
+/* Timer */
+
+#timer-display {
+
+    color: white;
+
+    font-size: 25px;
+
+}
+
+
+
+
+/* Game Over */
+
+#game-over {
+
+
+    position: absolute;
+
+
+    top: 50%;
+    left: 50%;
+
+
+    transform: translate(-50%, -50%);
+
+
+    display: none;
+
+
+    flex-direction: column;
+
+
+    align-items: center;
+
+
+    gap: 20px;
+
+
+    padding: 40px;
+
+
+    background: rgba(0,0,0,0.9);
+
+
+    border: 2px solid rgb(132,131,175);
+
+
+    border-radius: 10px;
+
+
+    color: white;
+
+}
+
+
+
+#game-over h1 {
+
+    margin: 0;
+
+    font-size: 35px;
+
+}
+
+
+
+#game-over p {
+
+    font-size: 24px;
+
+}
+
+
+
+#play-again {
+
+
+    padding: 10px 20px;
+
+
+    font-size: 18px;
+
+
+    cursor: pointer;
+
+
+    border: none;
+
+
+    border-radius: 5px;
+
+}
+
+
+#play-again:hover {
+
+    transform: scale(1.05);
+
+}
