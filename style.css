@@ -21,16 +21,16 @@ body {
 
 #game-wrapper {
 
-    width: min(95vw, 1200px);
+    width: min(95vw, 900px);
 
     height: min(90vh, 800px);
 
     display: flex;
+    
     flex-direction: column;
 
-    border: 2px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(1px);
 
-    backdrop-filter: blur(2px);
 }
 
 #hud {
@@ -42,7 +42,7 @@ body {
     align-items: center;
 
     padding: 0 20px;
-
+   
     font-size: clamp(16px, 2vw, 24px);
 
     border-bottom: 1px solid rgba(255,255,255,0.2);
