@@ -1,9 +1,9 @@
 let enem = [];
 
 const enemySprites = [
-    "assets/red.png",
-    "assets/enemy2.png",
-    "assets/enemy3.png"
+  "assets/red.png",
+  "assets/enemy2.png",
+  "assets/enemy3.png",
 ];
 
 const ENEMY_WIDTH = 40;
@@ -12,17 +12,17 @@ const ENEMY_HEIGHT = 32;
 const PLAYER_WIDTH = 70;
 
 let hero = {
-    left: 0,
-    top: 20,
-    speed: 5,
+  left: 0,
+  top: 20,
+  speed: 5,
 };
 
 function getGameWidth() {
-    return document.getElementById("game").offsetWidth;
+  return document.getElementById("game").offsetWidth;
 }
 
 function getGameHeight() {
-    return document.getElementById("game").offsetHeight;
+  return document.getElementById("game").offsetHeight;
 }
 
 // =========================
@@ -30,37 +30,29 @@ function getGameHeight() {
 // =========================
 
 function buildEnemies() {
+  enem = [];
 
-    enem = [];
+  const rows = 4;
+  const cols = 6;
 
-    const rows = 4;
-    const cols = 6;
+  const gameWidth = getGameWidth();
 
-    const gameWidth = getGameWidth();
-  
-    const spacingX = gameWidth / (cols +4);
-    const spacingY = 40; 
+  const spacingX = gameWidth / (cols + 4);
+  const spacingY = 40;
 
-    for (let row = 0; row < rows; row++) {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      enem.push({
+        left: spacingX + col * spacingX - ENEMY_WIDTH / 2,
 
-        for (let col = 0; col < cols; col++) {
+        top: 30 + row * spacingY,
 
-            enem.push({
+        type: row % enemySprites.length,
 
-                left: spacingX + col * spacingX - ENEMY_WIDTH / 2,
-
-                top: 30 + row * spacingY,
-
-                type: row % enemySprites.length,
-
-                alive: true
-
-            });
-
-        }
-
+        alive: true,
+      });
     }
-
+  }
 }
 
 // =========================
@@ -68,39 +60,30 @@ function buildEnemies() {
 // =========================
 
 function createEnemies() {
+  const enemiesDiv = document.getElementById("enemies");
 
-    const enemiesDiv = document.getElementById("enemies");
+  enemiesDiv.innerHTML = "";
 
-    enemiesDiv.innerHTML = "";
+  for (let i = 0; i < enem.length; i++) {
+    const el = document.createElement("div");
 
-    for (let i = 0; i < enem.length; i++) {
+    el.className = "enemy";
 
-        const el = document.createElement("div");
+    el.style.backgroundImage = `url('${enemySprites[enem[i].type]}')`;
 
-        el.className = "enemy";
+    enemiesDiv.appendChild(el);
 
-        el.style.backgroundImage =
-            `url('${enemySprites[enem[i].type]}')`;
-
-        enemiesDiv.appendChild(el);
-
-        enem[i].el = el;
-
-    }
-
+    enem[i].el = el;
+  }
 }
 
 function renderEnemies() {
+  for (let i = 0; i < enem.length; i++) {
+    if (!enem[i].alive) continue;
 
-    for (let i = 0; i < enem.length; i++) {
-
-        if (!enem[i].alive) continue;
-
-        enem[i].el.style.transform =
-            `translate(${enem[i].left}px, ${enem[i].top}px)`;
-
-    }
-
+    enem[i].el.style.transform =
+      `translate(${enem[i].left}px, ${enem[i].top}px)`;
+  }
 }
 
 // =========================
@@ -112,47 +95,33 @@ let direction = 1;
 let dropDistance = 20;
 
 function moveEnemies() {
+  let hitWall = false;
 
-    let hitWall = false;
+  const gameWidth = getGameWidth();
 
-    const gameWidth = getGameWidth();
+  for (let i = 0; i < enem.length; i++) {
+    if (!enem[i].alive) continue;
+
+    enem[i].left += speed * direction;
+
+    if (direction === 1 && enem[i].left + ENEMY_WIDTH >= gameWidth) {
+      hitWall = true;
+    }
+
+    if (direction === -1 && enem[i].left <= 0) {
+      hitWall = true;
+    }
+  }
+
+  if (hitWall) {
+    direction *= -1;
 
     for (let i = 0; i < enem.length; i++) {
+      if (!enem[i].alive) continue;
 
-        if (!enem[i].alive) continue;
-
-        enem[i].left += speed * direction;
-
-        if (
-            direction === 1 &&
-            enem[i].left + ENEMY_WIDTH >= gameWidth
-        ) {
-            hitWall = true;
-        }
-
-        if (
-            direction === -1 &&
-            enem[i].left <= 0
-        ) {
-            hitWall = true;
-        }
-
+      enem[i].top += dropDistance;
     }
-
-    if (hitWall) {
-
-        direction *= -1;
-
-        for (let i = 0; i < enem.length; i++) {
-
-            if (!enem[i].alive) continue;
-
-            enem[i].top += dropDistance;
-
-        }
-
-    }
-
+  }
 }
 
 // =========================
@@ -160,49 +129,103 @@ function moveEnemies() {
 // =========================
 
 let keys = {};
+let isPaused = false;
 
 document.addEventListener("keydown", (e) => {
     keys[e.key] = true;
+
+    if (e.key === "Escape") {
+
+        isPaused = !isPaused;
+
+        if (isPaused) {
+            document.getElementById("pause-menu").style.display = "flex";
+        } else {
+            document.getElementById("pause-menu").style.display = "none";
+        }
+    }
 });
 
-document.addEventListener("keyup", (e) => {
-    keys[e.key] = false;
+const continueBtn = document.getElementById("continue-btn");
+
+continueBtn.addEventListener("click", () => {
+
+        document.getElementById("pause-menu").style.display = "none";
+        isPaused = !isPaused;
 });
 
-function movePlayer() {
+const restartBtn = document.getElementById("restart-btn");
 
-    const gameWidth = getGameWidth();
+restartBtn.addEventListener("click", () => {
 
-    if (keys["ArrowLeft"]) {
-        hero.left -= hero.speed;
+        document.getElementById("pause-menu").style.display = "none";
+        isPaused = !isPaused;
+        restartGame();
+});
+
+function restartGame() {
+
+    // Reset score
+    score = 0;
+    updateScoreDisplay();
+
+    // Reset bullets
+    for (let i = 0; i < bullets.length; i++) {
+        bullets[i].el.remove();
     }
 
-    if (keys["ArrowRight"]) {
-        hero.left += hero.speed;
-    }
+    bullets = [];
 
-    if (hero.left < 0) {
-        hero.left = 0;
-    }
+    // Reset enemies
+    document.getElementById("enemies").innerHTML = "";
 
-    if (hero.left > gameWidth - PLAYER_WIDTH) {
-        hero.left = gameWidth - PLAYER_WIDTH;
-    }
+    buildEnemies();
+    createEnemies();
+    renderEnemies();
 
-    document.getElementById("player").style.transform =
-        `translateX(${hero.left}px)`;
+    // Reset player
+    initPlayer();
+
+    // Reset game variables
+    direction = 1;
+    lastShotTime = 0;
+    keys = {};
 
 }
 
+document.addEventListener("keyup", (e) => {
+  keys[e.key] = false;
+});
+
+
+function movePlayer() {
+  const gameWidth = getGameWidth();
+
+  if (keys["ArrowLeft"]) {
+    hero.left -= hero.speed;
+}
+
+  if (keys["ArrowRight"]) {
+    hero.left += hero.speed;
+  }
+
+  if (hero.left < 0) {
+    hero.left = 0;
+  }
+
+  if (hero.left > gameWidth - PLAYER_WIDTH) {
+    hero.left = gameWidth - PLAYER_WIDTH;
+  }
+
+  document.getElementById("player").style.transform =
+    `translateX(${hero.left}px)`;
+}
+
 function initPlayer() {
+  hero.left = getGameWidth() / 2 - PLAYER_WIDTH / 2;
 
-    hero.left =
-        getGameWidth() / 2 -
-        PLAYER_WIDTH / 2;
-
-    document.getElementById("player").style.transform =
-        `translateX(${hero.left}px)`;
-
+  document.getElementById("player").style.transform =
+    `translateX(${hero.left}px)`;
 }
 
 // =========================
@@ -220,79 +243,46 @@ const SHOOT_COOLDOWN_MS = 250;
 let lastShotTime = 0;
 
 function shoot(now) {
+  if (!keys[" "]) return;
 
-    if (!keys[" "]) return;
+  if (now - lastShotTime < SHOOT_COOLDOWN_MS) return;
 
-    if (
-        now - lastShotTime <
-        SHOOT_COOLDOWN_MS
-    ) return;
+  lastShotTime = now;
 
-    lastShotTime = now;
+  const el = document.createElement("div");
 
-    const el =
-        document.createElement("div");
+  el.className = "bullet";
 
-    el.className = "bullet";
+  document.getElementById("bullets").appendChild(el);
 
-    document
-        .getElementById("bullets")
-        .appendChild(el);
+  bullets.push({
+    left: hero.left + PLAYER_WIDTH / 2 - BULLET_WIDTH / 2,
 
-    bullets.push({
+    top: getGameHeight() - 60,
 
-        left:
-            hero.left +
-            PLAYER_WIDTH / 2 -
-            BULLET_WIDTH / 2,
-
-        top:
-            getGameHeight() - 60,
-
-        el
-
-    });
-
+    el,
+  });
 }
 
 function moveBullets() {
+  // Loop backwards so we can safely remove items while iterating.
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    bullets[i].top -= BULLET_SPEED;
 
-    for (
-        let i = bullets.length - 1;
-        i >= 0;
-        i--
-    ) {
+    // Remove bullet once it goes above the screen.
+    if (bullets[i].top + BULLET_HEIGHT < 0) {
+      bullets[i].el.remove(); // take it out of the DOM
 
-        bullets[i].top -= BULLET_SPEED;
-
-        if (
-            bullets[i].top +
-            BULLET_HEIGHT < 0
-        ) {
-
-            bullets[i].el.remove();
-
-            bullets.splice(i, 1);
-
-        }
-
+      bullets.splice(i, 1); // take it out of our array
     }
-
+  }
 }
 
 function renderBullets() {
-
-    for (
-        let i = 0;
-        i < bullets.length;
-        i++
-    ) {
-
-        bullets[i].el.style.transform =
-            `translate(${bullets[i].left}px, ${bullets[i].top}px)`;
-
-    }
-
+  for (let i = 0; i < bullets.length; i++) {
+    bullets[i].el.style.transform =
+      `translate(${bullets[i].left}px, ${bullets[i].top}px)`;
+  }
 }
 
 // =========================
@@ -301,90 +291,57 @@ function renderBullets() {
 
 let score = 0;
 
-function isColliding(
-    ax, ay, aw, ah,
-    bx, by, bw, bh
-) {
-
-    return (
-
-        ax < bx + bw &&
-        ax + aw > bx &&
-        ay < by + bh &&
-        ay + ah > by
-
-    );
-
+function isColliding(ax, ay, aw, ah, bx, by, bw, bh) {
+  return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 }
 
 function checkCollisions() {
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const b = bullets[i];
 
-    for (
-        let i = bullets.length - 1;
-        i >= 0;
-        i--
-    ) {
+    let bulletHit = false;
 
-        const b = bullets[i];
+    for (let j = 0; j < enem.length; j++) {
+      const e = enem[j];
 
-        let bulletHit = false;
+      if (!e.alive) continue;
 
-        for (
-            let j = 0;
-            j < enem.length;
-            j++
-        ) {
+      if (
+        isColliding(
+          b.left,
+          b.top,
+          BULLET_WIDTH,
+          BULLET_HEIGHT,
+          e.left,
+          e.top,
+          ENEMY_WIDTH,
+          ENEMY_HEIGHT,
+        )
+      ) {
+        e.alive = false;
 
-            const e = enem[j];
+        e.el.remove();
 
-            if (!e.alive) continue;
+        score += 10;
 
-            if (
-                isColliding(
-                    b.left,
-                    b.top,
-                    BULLET_WIDTH,
-                    BULLET_HEIGHT,
-                    e.left,
-                    e.top,
-                    ENEMY_WIDTH,
-                    ENEMY_HEIGHT
-                )
-            ) {
+        updateScoreDisplay();
 
-                e.alive = false;
+        bulletHit = true;
 
-                e.el.remove();
-
-                score += 10;
-
-                updateScoreDisplay();
-
-                bulletHit = true;
-
-                break;
-
-            }
-
-        }
-
-        if (bulletHit) {
-
-            bullets[i].el.remove();
-
-            bullets.splice(i, 1);
-
-        }
-
+        break;
+      }
     }
 
+    if (bulletHit) {
+      bullets[i].el.remove();
+
+      bullets.splice(i, 1);
+    }
+  }
 }
 
 function updateScoreDisplay() {
-
-    document.getElementById("score").textContent =
-        `Score: ${score}`;
-
+  document.getElementById("score").textContent = `Score: ${score}`;
 }
 
 // =========================
@@ -392,17 +349,15 @@ function updateScoreDisplay() {
 // =========================
 
 window.addEventListener("resize", () => {
+  document.getElementById("enemies").innerHTML = "";
 
-    document.getElementById("enemies").innerHTML = "";
+  buildEnemies();
 
-    buildEnemies();
+  createEnemies();
 
-    createEnemies();
+  renderEnemies();
 
-    renderEnemies();
-
-    initPlayer();
-
+  initPlayer();
 });
 
 // =========================
@@ -411,22 +366,23 @@ window.addEventListener("resize", () => {
 
 function gameLoop(now) {
 
-    moveEnemies();
+if(!isPaused){
 
-    renderEnemies();
+  moveEnemies();
 
-    movePlayer();
+  renderEnemies();
 
-    shoot(now);
+  movePlayer();
 
-    moveBullets();
+  shoot(now);
 
-    renderBullets();
+  moveBullets();
 
-    checkCollisions();
+  renderBullets();
 
-    requestAnimationFrame(gameLoop);
-
+  checkCollisions();
+}
+  requestAnimationFrame(gameLoop);
 }
 
 // =========================
