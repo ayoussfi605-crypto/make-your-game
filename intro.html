@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Invaders</title>
+
+    <link rel="stylesheet" href="intro.css" />
+  </head>
+  <body>
+    <video id="bg-video" autoplay muted loop>
+      <source
+        src="./assets/240_F_1869966792_zEpf5OUmf5VeIcLyWpKBFsWHsXSqeyqi_ST.mp4"
+        type="video/mp4"
+      />
+    </video>
+
+    <div id="overlay"></div>
+
+    <main id="intro">
+      <h1>SPACE INVADERS</h1>
+
+      <div class="controls">
+        <h3>CONTROLS</h3>
+
+        <p> Move Left ⬅️ </p>
+
+        <p> Move Right ➡️ </p>
+
+        <p> Shoot : SPACE </p>
+
+        <p> Pause : ESC </p>
+      </div>
+
+      <button id="start-btn"  onclick="window.location.href='index.html'">START GAME</button>
+    </main>
+  </body>
+</html>

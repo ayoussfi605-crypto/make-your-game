@@ -178,6 +178,104 @@ body {
 }
 
 
+/* Game Over */
+
+#game-over {
+
+
+    position: absolute;
+
+
+    top: 50%;
+    left: 50%;
+
+
+    transform: translate(-50%, -50%);
+
+
+    display: none;
+
+
+    flex-direction: column;
+
+
+    align-items: center;
+
+
+    gap: 20px;
+
+
+    padding: 40px;
+
+
+    background: rgba(0,0,0,0.9);
+
+
+    border: 2px solid rgb(132, 131, 175);
+
+
+    border-radius: 10px;
+
+
+    color: white;
+
+    
+    box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
+}
+
+
+
+#game-over h1 {
+
+    margin: 0;
+
+    font-size: 30px;
+    font-family: sans-serif;
+    color: rgb(173, 173, 211);    
+
+}
+
+
+
+#game-over p {
+
+    font-size: 24px;
+
+}
+
+
+
+#play-again {
+
+width: 100%;
+
+    padding: 12px 20px;
+
+    font-size: 18px;
+
+    font-family:  monospace;
+    
+    cursor: pointer;
+
+    border: none;
+
+    background-color:rgb(194, 238, 212) ;
+
+    border-radius: 12px;
+
+    transition: transform 0.3s;
+
+    box-shadow: 0 0 10px rgb(240, 240, 144)
+
+}
+
+
+#play-again:hover {
+
+    transform: scale(1.05);
+
+}
+
 /* Responsive */
 
 @media (max-width: 768px) {
@@ -204,30 +302,131 @@ body {
 
 @media (max-width: 768px) {
 
-    #hud {
+/* Game Area */
 
-        font-size: 16px;
+#game-wrapper {
 
-        padding: 0 10px;
-    }
+    width: 100vw;
 
-    #game-wrapper {
+    height: 100vh;
+}
 
-        width: 100vw;
+#hud {
 
-        height: 100vh;
+    height: 60px;
 
-        border: none;
-    }
+    padding: 0 10px;
 
-    #player img {
+    font-size: 16px;
+}
 
-        width: 50px;
-    }
+#player img {
 
-    .enemy {
+    width: 50px;
+}
 
-        width: 30px;
-        height: 24px;
-    }
+.enemy {
+
+    width: 30px;
+    height: 24px;
+}
+
+/* Pause Menu */
+
+#pause-menu {
+
+    width: 90%;
+
+    max-width: 320px;
+
+    min-width: auto;
+
+    padding: 20px;
+
+    gap: 20px;
+}
+
+#pause-menu h4 {
+
+    font-size: 24px;
+}
+
+#pause-menu button {
+
+    font-size: 16px;
+
+    padding: 10px 15px;
+}
+
+/* Game Over */
+
+#game-over {
+
+    width: 90%;
+
+    max-width: 350px;
+
+    padding: 25px;
+
+    gap: 15px;
+}
+
+#game-over h1 {
+
+    font-size: 24px;
+}
+
+#game-over p {
+
+    font-size: 18px;
+}
+
+#play-again {
+
+    font-size: 16px;
+
+    padding: 10px 15px;
+}
+
+}
+
+/* Extra Small Phones */
+
+@media (max-width: 480px) {
+
+#hud {
+
+    font-size: 14px;
+}
+
+#pause-menu h4 {
+
+    font-size: 20px;
+}
+
+#pause-menu button {
+
+    font-size: 14px;
+}
+
+#game-over h1 {
+
+    font-size: 20px;
+}
+
+#game-over p {
+
+    font-size: 16px;
+}
+
+#play-again {
+
+    font-size: 14px;
+}
+
+#player img {
+
+    width: 45px;
+}
+
 }
