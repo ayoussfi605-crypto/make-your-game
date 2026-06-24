@@ -211,7 +211,7 @@ let isPaused = false;
 document.addEventListener("keydown", (e) => {
   keys[e.key] = true;
 
-  if (e.key === "Escape" && !isGameOver) {
+  if (e.key === "Escape" && !isGameOver&& !e.repeat) {
 
     isPaused = !isPaused;
 
