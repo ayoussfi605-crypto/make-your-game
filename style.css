@@ -79,8 +79,6 @@ body {
 
     width: 40px;
     height: 32px;
-
-    background-image: url("./assets/yellow.png");
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -95,6 +93,14 @@ body {
     background-color: yellow;
 
     will-change: transform;
+}
+
+.enemy-bullet {
+  position: absolute;
+  width: 4px;
+  height: 14px;
+  background-color: red;
+  will-change: transform;
 }
 
 

@@ -11,6 +11,7 @@
     <div id="game-wrapper">
       <header id="hud">
         <div id="score">Score: 0</div>
+        <div id="level">Level: 1</div>
         <div id="lives">Lives: ❤️❤️❤️</div>
         <div id="timer">00:00</div>
       </header>
@@ -33,23 +34,15 @@
           <button id="restart-btn">Restart 🔄</button>
         </div>
         
-       <!-- Game Over -->
-    <div id="game-over">
-        
-        <h1>
-            💀 GAME OVER
-        </h1>
-        
-        <p>
-            Final Score: 0
-        </p>
-        
-        <button id="play-again">
-            🔄 Play Again
-        </button>
+        <!-- Game Over -->
+        <div id="game-over">
+          <h1>💀 GAME OVER</h1>
+          <p id="final-score">Final Score: 0</p>    <!-- ← add id here -->
+          <p id="final-time">Time: 00:00</p>        <!-- ← and this line -->
+          <button id="play-again">🔄 Play Again</button>
+        </div>
       </main>
     </div>
-
     <script src="js/main.js"></script>
   </body>
 </html>

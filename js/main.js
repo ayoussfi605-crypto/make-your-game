@@ -17,12 +17,89 @@ let hero = {
   speed: 5,
 };
 
+let startTime = null;
+let elapsedSeconds = 0;
+
+let lives = 3;
+let level = 1;
+
 function getGameWidth() {
   return document.getElementById("game").offsetWidth;
 }
 
 function getGameHeight() {
   return document.getElementById("game").offsetHeight;
+}
+
+function updateTimer(now) {
+  if (startTime === null) startTime = now;
+
+  elapsedSeconds = Math.floor((now - startTime) / 1000);
+
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+
+  document.getElementById("timer").textContent = `${mm}:${ss}`;
+}
+
+function updateLivesDisplay() {
+  const heartsMap = { 3: "❤️❤️❤️", 2: "❤️❤️", 1: "❤️", 0: "" };
+  document.getElementById("lives").textContent = "Lives: " + (heartsMap[lives] ?? "");
+}
+
+function loseLife() {
+  lives -= 1;
+  updateLivesDisplay();
+
+  if (lives <= 0) {
+    showGameOver();
+  }
+}
+
+function checkEnemiesReachedBottom() {
+  const gameHeight = getGameHeight();
+
+  for (let i = 0; i < enem.length; i++) {
+    if (!enem[i].alive) continue;
+
+    if (enem[i].top + ENEMY_HEIGHT >= gameHeight - 60) {  // 60 = player area
+      loseLife();
+      return;  // one life lost per frame is enough
+    }
+  }
+}
+
+function checkWinCondition() {
+  const aliveEnemies = enem.filter(e => e.alive);
+
+  if (aliveEnemies.length === 0) {
+    nextLevel();
+  }
+}
+
+function nextLevel() {
+  level += 1;
+
+  document.getElementById("level").textContent = `Level: ${level}`;
+
+  // clear leftover bullets
+  for (let i = 0; i < bullets.length; i++) bullets[i].el.remove();
+  bullets = [];
+
+  for (let i = 0; i < enemyBullets.length; i++) enemyBullets[i].el.remove();
+  enemyBullets = [];
+
+  // reset enemies
+  document.getElementById("enemies").innerHTML = "";
+  buildEnemies();
+  createEnemies();
+  renderEnemies();
+
+  // make enemies faster each level
+  speed = 2 + (level - 1) * 0.5;
 }
 
 // =========================
@@ -132,64 +209,78 @@ let keys = {};
 let isPaused = false;
 
 document.addEventListener("keydown", (e) => {
-    keys[e.key] = true;
+  keys[e.key] = true;
 
-    if (e.key === "Escape") {
+  if (e.key === "Escape") {
 
-        isPaused = !isPaused;
+    isPaused = !isPaused;
 
-        if (isPaused) {
-            document.getElementById("pause-menu").style.display = "flex";
-        } else {
-            document.getElementById("pause-menu").style.display = "none";
-        }
+    if (isPaused) {
+      document.getElementById("pause-menu").style.display = "flex";
+    } else {
+      document.getElementById("pause-menu").style.display = "none";
     }
+  }
 });
 
 const continueBtn = document.getElementById("continue-btn");
 
 continueBtn.addEventListener("click", () => {
 
-        document.getElementById("pause-menu").style.display = "none";
-        isPaused = !isPaused;
+  document.getElementById("pause-menu").style.display = "none";
+  isPaused = !isPaused;
 });
 
 const restartBtn = document.getElementById("restart-btn");
 
 restartBtn.addEventListener("click", () => {
 
-        document.getElementById("pause-menu").style.display = "none";
-        isPaused = !isPaused;
-        restartGame();
+  document.getElementById("pause-menu").style.display = "none";
+  isPaused = !isPaused;
+  restartGame();
 });
 
 function restartGame() {
+  //Reset timer
+  startTime = null;
+  elapsedSeconds = 0;
+  // Reset score
+  lives = 3;
+  updateLivesDisplay();
+  score = 0;
+  updateScoreDisplay();
 
-    // Reset score
-    score = 0;
-    updateScoreDisplay();
+  // Reset bullets
+  for (let i = 0; i < bullets.length; i++) {
+    bullets[i].el.remove();
+  }
 
-    // Reset bullets
-    for (let i = 0; i < bullets.length; i++) {
-        bullets[i].el.remove();
-    }
+  bullets = [];
 
-    bullets = [];
+  // Reset enemies
+  document.getElementById("enemies").innerHTML = "";
 
-    // Reset enemies
-    document.getElementById("enemies").innerHTML = "";
+  buildEnemies();
+  createEnemies();
+  renderEnemies();
+  // Reset Bullets
+  for (let i = 0; i < enemyBullets.length; i++){
+    enemyBullets[i].el.remove();
+  }
+  enemyBullets = [];
+  lastEnemyShotTime = 0;
+  // Reset player
+  initPlayer();
 
-    buildEnemies();
-    createEnemies();
-    renderEnemies();
+  level = 1;
+  speed = 2;
+  document.getElementById("level").textContent = `Level: 1`;
 
-    // Reset player
-    initPlayer();
-
-    // Reset game variables
-    direction = 1;
-    lastShotTime = 0;
-    keys = {};
+  // Reset game variables
+  direction = 1;
+  lastShotTime = 0;
+  keys = {};
+  isPaused = false;
 
 }
 
@@ -203,7 +294,7 @@ function movePlayer() {
 
   if (keys["ArrowLeft"]) {
     hero.left -= hero.speed;
-}
+  }
 
   if (keys["ArrowRight"]) {
     hero.left += hero.speed;
@@ -241,6 +332,13 @@ const BULLET_SPEED = 8;
 const SHOOT_COOLDOWN_MS = 250;
 
 let lastShotTime = 0;
+
+let enemyBullets = [];
+
+const ENEMY_BULLET_SPEED = 4;
+const ENEMY_SHOOT_INTERVAL = 1000; // every 1 second
+
+let lastEnemyShotTime = 0;
 
 function shoot(now) {
   if (!keys[" "]) return;
@@ -285,6 +383,61 @@ function renderBullets() {
   }
 }
 
+function enemyShoot(now) {
+  if (now - lastEnemyShotTime < ENEMY_SHOOT_INTERVAL) return;
+
+  lastEnemyShotTime = now;
+
+  // collect only alive enemies
+  const aliveEnemies = enem.filter(e => e.alive);
+
+  if (aliveEnemies.length === 0) return;
+
+  // pick a random one
+  const shooter = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+
+  const el = document.createElement("div");
+  el.className = "enemy-bullet";
+  document.getElementById("bullets").appendChild(el);
+
+  enemyBullets.push({
+    left: shooter.left + ENEMY_WIDTH / 2 - 2,  // center of the enemy
+    top: shooter.top + ENEMY_HEIGHT,            // bottom of the enemy
+    el,
+  });
+}
+
+function moveEnemyBullets() {
+  for (let i = enemyBullets.length - 1; i >= 0; i--) {
+    enemyBullets[i].top += ENEMY_BULLET_SPEED;  // move downward
+
+    // remove if it goes off screen
+    if (enemyBullets[i].top > getGameHeight()) {
+      enemyBullets[i].el.remove();
+      enemyBullets.splice(i, 1);
+      continue;
+    }
+
+    // check if it hit the player
+    const playerBottom = getGameHeight() - 20;         // matches #player bottom: 20px
+    const playerTop = playerBottom - 50;               // approximate player height
+
+    if (isColliding(
+      enemyBullets[i].left, enemyBullets[i].top, 4, 14,   // bullet box
+      hero.left, playerTop, PLAYER_WIDTH, 50               // player box
+    )) {
+      enemyBullets[i].el.remove();
+      enemyBullets.splice(i, 1);
+      loseLife();  // reuse the function you already have!
+      continue;
+    }
+
+    // render
+    enemyBullets[i].el.style.transform =
+      `translate(${enemyBullets[i].left}px, ${enemyBullets[i].top}px)`;
+  }
+}
+
 // =========================
 // COLLISIONS
 // =========================
@@ -306,18 +459,7 @@ function checkCollisions() {
 
       if (!e.alive) continue;
 
-      if (
-        isColliding(
-          b.left,
-          b.top,
-          BULLET_WIDTH,
-          BULLET_HEIGHT,
-          e.left,
-          e.top,
-          ENEMY_WIDTH,
-          ENEMY_HEIGHT,
-        )
-      ) {
+      if (isColliding(b.left, b.top, BULLET_WIDTH, BULLET_HEIGHT, e.left, e.top, ENEMY_WIDTH, ENEMY_HEIGHT,)) {
         e.alive = false;
 
         e.el.remove();
@@ -344,6 +486,25 @@ function updateScoreDisplay() {
   document.getElementById("score").textContent = `Score: ${score}`;
 }
 
+function showGameOver() {
+  isPaused = true;
+
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+
+  document.getElementById("final-score").textContent = `Final Score: ${score}`;
+  document.getElementById("final-time").textContent = `Time: ${mm}:${ss}`;
+
+  document.getElementById("game-over").style.display = "flex";
+}
+
+document.getElementById("play-again").addEventListener("click", () => {
+  document.getElementById("game-over").style.display = "none";
+  restartGame();
+});
+
 // =========================
 // RESIZE
 // =========================
@@ -366,22 +527,31 @@ window.addEventListener("resize", () => {
 
 function gameLoop(now) {
 
-if(!isPaused){
+  if (!isPaused) {
+    updateTimer(now);
 
-  moveEnemies();
+    moveEnemies();
 
-  renderEnemies();
+    renderEnemies();
 
-  movePlayer();
+    movePlayer();
 
-  shoot(now);
+    shoot(now);
 
-  moveBullets();
+    moveBullets();
 
-  renderBullets();
+    renderBullets();
 
-  checkCollisions();
-}
+    checkCollisions();
+
+    checkEnemiesReachedBottom();
+
+    enemyShoot(now);
+    
+    moveEnemyBullets();
+
+    checkWinCondition(); 
+  }
   requestAnimationFrame(gameLoop);
 }
 
