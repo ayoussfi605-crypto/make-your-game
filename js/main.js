@@ -211,7 +211,7 @@ let isPaused = false;
 document.addEventListener("keydown", (e) => {
   keys[e.key] = true;
 
-  if (e.key === "Escape") {
+  if (e.key === "Escape" && !isGameOver) {
 
     isPaused = !isPaused;
 
@@ -281,7 +281,7 @@ function restartGame() {
   lastShotTime = 0;
   keys = {};
   isPaused = false;
-
+  isGameOver = false;
 }
 
 document.addEventListener("keyup", (e) => {
@@ -485,10 +485,10 @@ function checkCollisions() {
 function updateScoreDisplay() {
   document.getElementById("score").textContent = `Score: ${score}`;
 }
-
+let isGameOver = false;
 function showGameOver() {
   isPaused = true;
-
+  isGameOver = true;
   const minutes = Math.floor(elapsedSeconds / 60);
   const seconds = elapsedSeconds % 60;
   const mm = String(minutes).padStart(2, "0");
