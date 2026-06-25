@@ -41,9 +41,9 @@ body {
 }
 
 #intro {
-  width: min(98vw, 1200px);
+  width: min(95vw, 1200px);
 
-  padding: 25px 120px;
+  padding: clamp(15px, 4vw, 25px) clamp(15px, 8vw, 120px);
 
   text-align: center;
 
@@ -94,6 +94,10 @@ body {
 /* CONTROLS */
 
 .controls {
+  width: 100%;
+  max-width: 100%;
+
+  overflow-wrap: break-word;
   margin: 30px 0;
 
   padding: 20px;

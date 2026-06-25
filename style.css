@@ -4,87 +4,64 @@
 
 body {
     margin: 0;
-
+    overflow: auto;
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     background-image: url("./assets/stars-galaxy-2560x1440-10307.jpg");
     background-size: cover;
     background-position: center;
-
     color: white;
     font-family: Arial, sans-serif;
 }
 
 #game-wrapper {
-
-    width: min(95vw, 900px);
-
-    height: min(90vh, 800px);
-
+    width: 900px;
+    height: 800px;
     display: flex;
-
     flex-direction: column;
-
     backdrop-filter: blur(1px);
-
 }
 
 #hud {
-
     height: 70px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 0 20px;
-
     font-size: clamp(16px, 2vw, 24px);
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #game {
-
     flex: 1;
-
     position: relative;
-
     overflow: hidden;
 }
 
 #player {
-
     position: absolute;
-
     bottom: 20px;
-
-    transform: translateX(-50%);
+    left: 0;
 }
 
 #player img {
-
     width: clamp(50px, 6vw, 70px);
-
     display: block;
 }
 
 .enemy {
-
     position: absolute;
 
     width: 40px;
     height: 32px;
+
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .bullet {
-
     position: absolute;
 
     width: 4px;
@@ -96,18 +73,19 @@ body {
 }
 
 .enemy-bullet {
-  position: absolute;
-  width: 4px;
-  height: 14px;
-  background-color: red;
-  will-change: transform;
-}
+    position: absolute;
 
+    width: 4px;
+    height: 14px;
+
+    background-color: red;
+
+    will-change: transform;
+}
 
 /* Pause Menu */
 
 #pause-menu {
-
     display: none;
 
     position: absolute;
@@ -142,297 +120,209 @@ body {
 }
 
 #pause-menu h4 {
-
     margin: 0;
 
     font-size: 30px;
-    font-family: sans-serif;
-    color: rgb(173, 173, 211);    
+
+    color: rgb(173, 173, 211);
 }
 
 #pause-menu button {
-
     width: 100%;
 
     padding: 12px 20px;
 
     font-size: 18px;
 
-    font-family:  monospace;
-    
+    font-family: monospace;
+
     cursor: pointer;
 
     border: none;
 
-    background-color:rgb(194, 238, 212) ;
+    background-color: rgb(194, 238, 212);
 
     border-radius: 12px;
 
     transition: transform 0.3s;
 
-    box-shadow: 0 0 10px rgb(240, 240, 144)
+    box-shadow: 0 0 10px rgb(240, 240, 144);
 }
 
 #pause-menu button:hover {
-
     transform: scale(1.05);
 }
 
 #pause-menu button:active {
-
     transform: scale(0.98);
 }
-
 
 /* Game Over */
 
 #game-over {
-
-
     position: absolute;
-
 
     top: 50%;
     left: 50%;
 
-
     transform: translate(-50%, -50%);
-
 
     display: none;
 
-
     flex-direction: column;
-
-
     align-items: center;
-
 
     gap: 20px;
 
-
     padding: 40px;
 
-
-    background: rgba(0,0,0,0.9);
-
+    background: rgba(0, 0, 0, 0.9);
 
     border: 2px solid rgb(132, 131, 175);
 
-
     border-radius: 10px;
-
 
     color: white;
 
-    
+    z-index: 1000;
+
     box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
 }
 
-
-
 #game-over h1 {
-
     margin: 0;
 
     font-size: 30px;
-    font-family: sans-serif;
-    color: rgb(173, 173, 211);    
 
+    color: rgb(173, 173, 211);
 }
-
-
 
 #game-over p {
-
     font-size: 24px;
-
 }
 
-
-
 #play-again {
-
-width: 100%;
+    width: 100%;
 
     padding: 12px 20px;
 
     font-size: 18px;
 
-    font-family:  monospace;
-    
+    font-family: monospace;
+
     cursor: pointer;
 
     border: none;
 
-    background-color:rgb(194, 238, 212) ;
+    background-color: rgb(194, 238, 212);
 
     border-radius: 12px;
 
     transition: transform 0.3s;
 
-    box-shadow: 0 0 10px rgb(240, 240, 144)
-
+    box-shadow: 0 0 10px rgb(240, 240, 144);
 }
-
 
 #play-again:hover {
-
     transform: scale(1.05);
-
 }
 
-/* Responsive */
+/* Tablet + Mobile */
 
 @media (max-width: 768px) {
 
-    #pause-menu {
+    #game-wrapper {
+        width: 100vw;
+        height: 100vh;
+    }
 
-        min-width: 240px;
+    #hud {
+        height: 60px;
+        padding: 0 10px;
+        font-size: 16px;
+    }
+
+    #player img {
+        width: 50px;
+    }
+
+    .enemy {
+        width: 30px;
+        height: 24px;
+    }
+
+    #pause-menu {
+        width: 90%;
+        max-width: 320px;
+        min-width: auto;
 
         padding: 20px;
+
+        gap: 20px;
     }
 
     #pause-menu h4 {
-
-        font-size: 22px;
+        font-size: 24px;
     }
 
     #pause-menu button {
-
         font-size: 16px;
+        padding: 10px 15px;
+    }
+
+    #game-over {
+        width: 90%;
+        max-width: 350px;
+
+        padding: 25px;
+
+        gap: 15px;
+    }
+
+    #game-over h1 {
+        font-size: 24px;
+    }
+
+    #game-over p {
+        font-size: 18px;
+    }
+
+    #play-again {
+        font-size: 16px;
+        padding: 10px 15px;
     }
 }
 
-/* Small screens */
-
-@media (max-width: 768px) {
-
-/* Game Area */
-
-#game-wrapper {
-
-    width: 100vw;
-
-    height: 100vh;
-}
-
-#hud {
-
-    height: 60px;
-
-    padding: 0 10px;
-
-    font-size: 16px;
-}
-
-#player img {
-
-    width: 50px;
-}
-
-.enemy {
-
-    width: 30px;
-    height: 24px;
-}
-
-/* Pause Menu */
-
-#pause-menu {
-
-    width: 90%;
-
-    max-width: 320px;
-
-    min-width: auto;
-
-    padding: 20px;
-
-    gap: 20px;
-}
-
-#pause-menu h4 {
-
-    font-size: 24px;
-}
-
-#pause-menu button {
-
-    font-size: 16px;
-
-    padding: 10px 15px;
-}
-
-/* Game Over */
-
-#game-over {
-
-    width: 90%;
-
-    max-width: 350px;
-
-    padding: 25px;
-
-    gap: 15px;
-}
-
-#game-over h1 {
-
-    font-size: 24px;
-}
-
-#game-over p {
-
-    font-size: 18px;
-}
-
-#play-again {
-
-    font-size: 16px;
-
-    padding: 10px 15px;
-}
-
-}
-
-/* Extra Small Phones */
+/* Small Phones */
 
 @media (max-width: 480px) {
 
-#hud {
+    #hud {
+        font-size: 14px;
+    }
 
-    font-size: 14px;
+    #player img {
+        width: 45px;
+    }
+
+    #pause-menu h4 {
+        font-size: 20px;
+    }
+
+    #pause-menu button {
+        font-size: 14px;
+    }
+
+    #game-over h1 {
+        font-size: 20px;
+    }
+
+    #game-over p {
+        font-size: 16px;
+    }
+
+    #play-again {
+        font-size: 14px;
+    }
 }
 
-#pause-menu h4 {
-
-    font-size: 20px;
-}
-
-#pause-menu button {
-
-    font-size: 14px;
-}
-
-#game-over h1 {
-
-    font-size: 20px;
-}
-
-#game-over p {
-
-    font-size: 16px;
-}
-
-#play-again {
-
-    font-size: 14px;
-}
-
-#player img {
-
-    width: 45px;
-}
-
-}

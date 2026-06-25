@@ -6,11 +6,6 @@ const enemySprites = [
   "assets/enemy3.png",
 ];
 
-const ENEMY_WIDTH = 40;
-const ENEMY_HEIGHT = 32;
-
-const PLAYER_WIDTH = 70;
-
 let hero = {
   left: 0,
   top: 20,
@@ -22,6 +17,19 @@ let elapsedSeconds = 0;
 
 let lives = 3;
 let level = 1;
+
+function getEnemyWidth() {
+  return document.querySelector(".enemy")?.offsetWidth || 40;
+}
+
+function getEnemyHeight() {
+  return document.querySelector(".enemy")?.offsetHeight || 32;
+}
+
+function getPlayerWidth() {
+  return document.querySelector("#player img")?.offsetWidth || 70;
+}
+
 
 function getGameWidth() {
   return document.getElementById("game").offsetWidth;
@@ -65,7 +73,7 @@ function checkEnemiesReachedBottom() {
   for (let i = 0; i < enem.length; i++) {
     if (!enem[i].alive) continue;
 
-    if (enem[i].top + ENEMY_HEIGHT >= gameHeight - 60) {  // 60 = player area
+    if (enem[i].top + getEnemyHeight() >= gameHeight - 60) {  // 60 = player area
       loseLife();
       return;  // one life lost per frame is enough
     }
@@ -120,7 +128,7 @@ function buildEnemies() {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       enem.push({
-        left: spacingX + col * spacingX - ENEMY_WIDTH / 2,
+        left: spacingX + col * spacingX - getEnemyWidth() / 2,
 
         top: 30 + row * spacingY,
 
@@ -181,7 +189,7 @@ function moveEnemies() {
 
     enem[i].left += speed * direction;
 
-    if (direction === 1 && enem[i].left + ENEMY_WIDTH >= gameWidth) {
+    if (direction === 1 && enem[i].left + getEnemyWidth() >= gameWidth) {
       hitWall = true;
     }
 
@@ -304,8 +312,8 @@ function movePlayer() {
     hero.left = 0;
   }
 
-  if (hero.left > gameWidth - PLAYER_WIDTH) {
-    hero.left = gameWidth - PLAYER_WIDTH;
+  if (hero.left > gameWidth - getPlayerWidth()) {
+    hero.left = gameWidth - getPlayerWidth();
   }
 
   document.getElementById("player").style.transform =
@@ -313,7 +321,7 @@ function movePlayer() {
 }
 
 function initPlayer() {
-  hero.left = getGameWidth() / 2 - PLAYER_WIDTH / 2;
+  hero.left = getGameWidth() / 2 - getPlayerWidth() / 2;
 
   document.getElementById("player").style.transform =
     `translateX(${hero.left}px)`;
@@ -354,7 +362,7 @@ function shoot(now) {
   document.getElementById("bullets").appendChild(el);
 
   bullets.push({
-    left: hero.left + PLAYER_WIDTH / 2 - BULLET_WIDTH / 2,
+    left: hero.left + getPlayerWidth() / 2 - BULLET_WIDTH / 2,
 
     top: getGameHeight() - 60,
 
@@ -401,8 +409,8 @@ function enemyShoot(now) {
   document.getElementById("bullets").appendChild(el);
 
   enemyBullets.push({
-    left: shooter.left + ENEMY_WIDTH / 2 - 2,  // center of the enemy
-    top: shooter.top + ENEMY_HEIGHT,            // bottom of the enemy
+    left: shooter.left + getEnemyWidth() / 2 - 2,  // center of the enemy
+    top: shooter.top + getEnemyHeight(),            // bottom of the enemy
     el,
   });
 }
@@ -424,7 +432,7 @@ function moveEnemyBullets() {
 
     if (isColliding(
       enemyBullets[i].left, enemyBullets[i].top, 4, 14,   // bullet box
-      hero.left, playerTop, PLAYER_WIDTH, 50               // player box
+      hero.left, playerTop, getPlayerWidth(), 50               // player box
     )) {
       enemyBullets[i].el.remove();
       enemyBullets.splice(i, 1);
@@ -459,7 +467,7 @@ function checkCollisions() {
 
       if (!e.alive) continue;
 
-      if (isColliding(b.left, b.top, BULLET_WIDTH, BULLET_HEIGHT, e.left, e.top, ENEMY_WIDTH, ENEMY_HEIGHT,)) {
+      if (isColliding(b.left, b.top, BULLET_WIDTH, BULLET_HEIGHT, e.left, e.top, getEnemyWidth(), getEnemyHeight(),)) {
         e.alive = false;
 
         e.el.remove();
@@ -505,21 +513,6 @@ document.getElementById("play-again").addEventListener("click", () => {
   restartGame();
 });
 
-// =========================
-// RESIZE
-// =========================
-
-window.addEventListener("resize", () => {
-  document.getElementById("enemies").innerHTML = "";
-
-  buildEnemies();
-
-  createEnemies();
-
-  renderEnemies();
-
-  initPlayer();
-});
 
 // =========================
 // GAME LOOP
