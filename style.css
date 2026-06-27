@@ -1,328 +1,311 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    overflow: auto;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url("./assets/stars-galaxy-2560x1440-10307.jpg");
-    background-size: cover;
-    background-position: center;
-    color: white;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  overflow: auto;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("./assets/stars-galaxy-2560x1440-10307.jpg") center/cover
+    no-repeat;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
 #game-wrapper {
-    width: 900px;
-    height: 800px;
-    display: flex;
-    flex-direction: column;
-    backdrop-filter: blur(1px);
+  width: 900px;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(1px);
 }
 
 #hud {
-    height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    font-size: clamp(16px, 2vw, 24px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  font-size: clamp(16px, 2vw, 24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 #game {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
 #player {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
 }
 
 #player img {
-    width: clamp(50px, 6vw, 70px);
-    display: block;
+  width: clamp(50px, 6vw, 70px);
+  display: block;
 }
 
 .enemy {
-    position: absolute;
+  position: absolute;
 
-    width: 40px;
-    height: 32px;
+  width: 40px;
+  height: 32px;
 
-    background-size: contain;
-    background-repeat: no-repeat;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.bullet,
+.enemy-bullet {
+  position: absolute;
+  width: 4px;
+  height: 14px;
+  will-change: transform;
 }
 
 .bullet {
-    position: absolute;
-
-    width: 4px;
-    height: 14px;
-
-    background-color: yellow;
-
-    will-change: transform;
+  background-color: yellow;
 }
 
 .enemy-bullet {
-    position: absolute;
-
-    width: 4px;
-    height: 14px;
-
-    background-color: red;
-
-    will-change: transform;
+  background-color: red;
 }
 
 /* Pause Menu */
 
 #pause-menu {
-    display: none;
+  display: none;
 
-    position: absolute;
+  position: absolute;
 
-    top: 50%;
-    left: 50%;
+  top: 50%;
+  left: 50%;
 
-    transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 
-    gap: 30px;
+  gap: 30px;
 
-    min-width: 280px;
+  min-width: 280px;
 
-    padding: 30px;
+  padding: 30px;
 
-    background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.9);
 
-    border: 2px solid rgb(132, 131, 175);
+  border: 2px solid rgb(132, 131, 175);
 
-    border-radius: 12px;
+  border-radius: 12px;
 
-    text-align: center;
+  text-align: center;
 
-    color: white;
+  color: white;
 
-    z-index: 1000;
+  z-index: 1000;
 
-    box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
+  box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
 }
 
 #pause-menu h4 {
-    margin: 0;
+  margin: 0;
 
-    font-size: 30px;
+  font-size: 30px;
 
-    color: rgb(173, 173, 211);
+  color: rgb(173, 173, 211);
 }
 
-#pause-menu button {
-    width: 100%;
-
-    padding: 12px 20px;
-
-    font-size: 18px;
-
-    font-family: monospace;
-
-    cursor: pointer;
-
-    border: none;
-
-    background-color: rgb(194, 238, 212);
-
-    border-radius: 12px;
-
-    transition: transform 0.3s;
-
-    box-shadow: 0 0 10px rgb(240, 240, 144);
+#pause-menu button,
+#play-again {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-family: monospace;
+  cursor: pointer;
+  border: none;
+  background-color: rgb(194, 238, 212);
+  border-radius: 12px;
+  transition: transform 0.3s;
+  box-shadow: 0 0 10px rgb(240, 240, 144);
 }
 
-#pause-menu button:hover {
-    transform: scale(1.05);
+#pause-menu button:hover,
+#play-again:hover {
+  transform: scale(1.05);
 }
 
 #pause-menu button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Game Over */
 
 #game-over {
-    position: absolute;
+  position: absolute;
 
-    top: 50%;
-    left: 50%;
+  top: 50%;
+  left: 50%;
 
-    transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
-    display: none;
+  display: none;
 
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 
-    gap: 20px;
+  gap: 20px;
 
-    padding: 40px;
+  padding: 40px;
 
-    background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.9);
 
-    border: 2px solid rgb(132, 131, 175);
+  border: 2px solid rgb(132, 131, 175);
 
-    border-radius: 10px;
+  border-radius: 10px;
 
-    color: white;
+  color: white;
 
-    z-index: 1000;
+  z-index: 1000;
 
-    box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
+  box-shadow: 0 0 20px rgba(132, 131, 175, 0.5);
 }
 
 #game-over h1 {
-    margin: 0;
+  margin: 0;
 
-    font-size: 30px;
+  font-size: 30px;
 
-    color: rgb(173, 173, 211);
+  color: rgb(173, 173, 211);
 }
 
 #game-over p {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 #play-again {
-    width: 100%;
+  width: 100%;
 
-    padding: 12px 20px;
+  padding: 12px 20px;
 
-    font-size: 18px;
+  font-size: 18px;
 
-    font-family: monospace;
+  font-family: monospace;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    border: none;
+  border: none;
 
-    background-color: rgb(194, 238, 212);
+  background-color: rgb(194, 238, 212);
 
-    border-radius: 12px;
+  border-radius: 12px;
 
-    transition: transform 0.3s;
+  transition: transform 0.3s;
 
-    box-shadow: 0 0 10px rgb(240, 240, 144);
+  box-shadow: 0 0 10px rgb(240, 240, 144);
 }
 
 #play-again:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Tablet + Mobile */
 
 @media (max-width: 768px) {
+  #game-wrapper {
+    width: 100vw;
+    height: 100vh;
+  }
 
-    #game-wrapper {
-        width: 100vw;
-        height: 100vh;
-    }
+  #hud {
+    height: 60px;
+    padding: 0 10px;
+    font-size: 16px;
+  }
 
-    #hud {
-        height: 60px;
-        padding: 0 10px;
-        font-size: 16px;
-    }
+  #player img {
+    width: 50px;
+  }
 
-    #player img {
-        width: 50px;
-    }
+  .enemy {
+    width: 30px;
+    height: 24px;
+  }
 
-    .enemy {
-        width: 30px;
-        height: 24px;
-    }
+  #pause-menu {
+    width: 90%;
+    max-width: 320px;
+    min-width: auto;
 
-    #pause-menu {
-        width: 90%;
-        max-width: 320px;
-        min-width: auto;
+    padding: 20px;
 
-        padding: 20px;
+    gap: 20px;
+  }
 
-        gap: 20px;
-    }
+  #pause-menu h4 {
+    font-size: 24px;
+  }
 
-    #pause-menu h4 {
-        font-size: 24px;
-    }
+  #pause-menu button {
+    font-size: 16px;
+    padding: 10px 15px;
+  }
 
-    #pause-menu button {
-        font-size: 16px;
-        padding: 10px 15px;
-    }
+  #game-over {
+    width: 90%;
+    max-width: 350px;
 
-    #game-over {
-        width: 90%;
-        max-width: 350px;
+    padding: 25px;
 
-        padding: 25px;
+    gap: 15px;
+  }
 
-        gap: 15px;
-    }
+  #game-over h1 {
+    font-size: 24px;
+  }
 
-    #game-over h1 {
-        font-size: 24px;
-    }
+  #game-over p {
+    font-size: 18px;
+  }
 
-    #game-over p {
-        font-size: 18px;
-    }
-
-    #play-again {
-        font-size: 16px;
-        padding: 10px 15px;
-    }
+  #play-again {
+    font-size: 16px;
+    padding: 10px 15px;
+  }
 }
 
 /* Small Phones */
 
 @media (max-width: 480px) {
+  #hud {
+    font-size: 14px;
+  }
 
-    #hud {
-        font-size: 14px;
-    }
+  #player img {
+    width: 45px;
+  }
 
-    #player img {
-        width: 45px;
-    }
+  #pause-menu h4 {
+    font-size: 20px;
+  }
 
-    #pause-menu h4 {
-        font-size: 20px;
-    }
+  #pause-menu button {
+    font-size: 14px;
+  }
 
-    #pause-menu button {
-        font-size: 14px;
-    }
+  #game-over h1 {
+    font-size: 20px;
+  }
 
-    #game-over h1 {
-        font-size: 20px;
-    }
+  #game-over p {
+    font-size: 16px;
+  }
 
-    #game-over p {
-        font-size: 16px;
-    }
-
-    #play-again {
-        font-size: 14px;
-    }
+  #play-again {
+    font-size: 14px;
+  }
 }
-

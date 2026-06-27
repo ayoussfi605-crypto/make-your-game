@@ -148,6 +148,8 @@ body {
 
   border-radius: 10px;
 
+  text-decoration: none;
+
   cursor: pointer;
 
   transition: 0.3s;
