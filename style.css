@@ -114,10 +114,9 @@ body {
 
 #pause-menu h4 {
   margin: 0;
-
   font-size: 30px;
-
   color: rgb(173, 173, 211);
+  animation: glowBreath 2s ease-in-out infinite; /* 👈 add this */
 }
 
 #pause-menu button,
@@ -177,10 +176,9 @@ body {
 
 #game-over h1 {
   margin: 0;
-
   font-size: 30px;
-
   color: rgb(173, 173, 211);
+  animation: glowBreath 2s ease-in-out infinite; /* 👈 add this */
 }
 
 #game-over p {
@@ -214,6 +212,15 @@ body {
 }
 
 /* Tablet + Mobile */
+
+@keyframes glowBreath {
+  0%, 100% {
+    text-shadow: 0 0 6px #fff, 0 0 12px rgb(173, 173, 211);
+  }
+  50% {
+    text-shadow: 0 0 14px #fff, 0 0 28px rgb(173, 173, 211), 0 0 40px rgba(132, 131, 175, 0.8);
+  }
+}
 
 @media (max-width: 768px) {
   #game-wrapper {

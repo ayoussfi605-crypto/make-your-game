@@ -21,4 +21,5 @@ export const state = {
   score: 0,
   lastShotTime: 0,
   lastEnemyShotTime: 0,
+  pausedAt: null,
 };

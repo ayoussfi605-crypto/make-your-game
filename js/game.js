@@ -51,8 +51,12 @@ export function setupControls() {
     if (e.key === "Escape" && !state.isGameOver && !e.repeat) {
       state.isPaused = !state.isPaused;
       if (state.isPaused) {
+        state.pausedAt = performance.now();
         document.getElementById("pause-menu").style.display = "flex";
+
       } else {
+        state.startTime += performance.now() - state.pausedAt;
+        state.pausedAt = null;
         document.getElementById("pause-menu").style.display = "none";
       }
     }
@@ -63,6 +67,8 @@ export function setupControls() {
   });
 
   document.getElementById("continue-btn").addEventListener("click", () => {
+    state.startTime += performance.now() - state.pausedAt;
+    state.pausedAt = null;
     document.getElementById("pause-menu").style.display = "none";
     state.isPaused = false;
   });
