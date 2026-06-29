@@ -5,6 +5,7 @@ import {
   getGameWidth,
   getGameHeight,
 } from "./dom.js";
+import { decreaseEnemyShootInterval } from "./bullets.js";
 import { updateScoreDisplay, updateLevelDisplay, showGameOver } from "./ui.js";
 
 export function buildEnemies() {
@@ -79,7 +80,7 @@ export function moveEnemies() {
   }
 }
 
-export function checkEnemiesReahedBottom(loseLicfe) {
+export function checkEnemiesReachedBottom(loseLife) {
   const gameHeight = getGameHeight();
 
   for (let i = 0; i < state.enem.length; i++) {
@@ -95,7 +96,7 @@ export function checkEnemiesReahedBottom(loseLicfe) {
 export function nextLevel() {
   state.level += 1;
   updateLevelDisplay();
-
+  decreaseEnemyShootInterval();
   for (let i = 0; i < state.bullets.length; i++) {
     state.bullets[i].el.remove();
   }
@@ -111,7 +112,7 @@ export function nextLevel() {
   createEnemies();
   renderEnemies();
 
-  state.speed = 2 + (state.level - 1) * 0.5;
+  state.speed = 1 + (state.level - 1) * 3;
 }
 
 export function checkWinCondition() {

@@ -7,10 +7,11 @@ import {
   updateLevelDisplay,
   hidePauseMenu,
 } from "./ui.js";
-import { removeAllProjectiles } from "./bullets.js";
 import { loseLife } from "./lives.js";
+import {removeAllProjectiles,resetEnemyShootInterval} from "./bullets.js";
 
 export function restartGame() {
+  resetEnemyShootInterval();
   state.startTime = null;
   state.elapsedSeconds = 0;
 

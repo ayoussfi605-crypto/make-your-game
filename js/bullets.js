@@ -7,8 +7,15 @@ const BULLET_WIDTH = 4;
 const BULLET_HEIGHT = 14;
 const BULLET_SPEED = 8;
 const ENEMY_BULLET_SPEED = 4;
-const ENEMY_SHOOT_INTERVAL = 1000;
+export let ENEMY_SHOOT_INTERVAL = 1000;
 
+export function resetEnemyShootInterval() {
+  ENEMY_SHOOT_INTERVAL = 1000;
+}
+
+export function decreaseEnemyShootInterval() {
+  ENEMY_SHOOT_INTERVAL = Math.max(200, ENEMY_SHOOT_INTERVAL - 500);
+}
 export function shoot(now) {
   if (!state.keys[" "]) return;
   if (now - state.lastShotTime < 250) return;
