@@ -14,11 +14,11 @@ export function resetEnemyShootInterval() {
 }
 
 export function decreaseEnemyShootInterval() {
-  ENEMY_SHOOT_INTERVAL = Math.max(200, ENEMY_SHOOT_INTERVAL - 500);
+  ENEMY_SHOOT_INTERVAL = Math.max(200, ENEMY_SHOOT_INTERVAL - 100);
 }
 export function shoot(now) {
   if (!state.keys[" "]) return;
-  if (now - state.lastShotTime < 250) return;
+  if (now - state.lastShotTime < 500) return;
 
   state.lastShotTime = now;
 
