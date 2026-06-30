@@ -65,7 +65,6 @@ body {
   position: absolute;
   width: 4px;
   height: 14px;
-  will-change: transform;
 }
 
 .bullet {
